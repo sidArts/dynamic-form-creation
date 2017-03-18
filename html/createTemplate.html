@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="jquery-ui.css">
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="jquery-ui.js"></script>
+	<script type="text/javascript" src="bootstrap.js"></script>
+	<script type="text/javascript" src="angular.js"></script>
+	
+</head>
+<body ng-controller="appController">
+
+<div style="position: fixed; top: 0; left: 0; width: 18%; height: 100%; z-index: 100;">
+	<ul class="list-group">
+		<li class="list-group-item">
+			Text Input &nbsp; 
+			<a href="javascript: void(0)" ng-click="createElement(textInput);">
+				<i class="fa fa-pencil-square-o fa-2x"></i>
+			</a>
+		</li>
+		<li class="list-group-item">
+			Text Area &nbsp; 
+			<a href="javascript: void(0)" ng-click="createElement(textareaInput);">
+				<i class="fa fa-pencil-square-o fa-2x"></i>
+			</a>
+		</li>
+		<li class="list-group-item">
+			Select Input &nbsp; 
+			<a href="javascript: void(0)" ng-click="createElement(selectInput);">
+				<i class="fa fa-pencil-square-o fa-2x"></i>
+			</a>
+		</li>
+		<li class="list-group-item">
+			Checkbox Input &nbsp; 
+			<a href="javascript: void(0)" ng-click="createElement(checkboxInput);">
+				<i class="fa fa-pencil-square-o fa-2x"></i>
+			</a>
+		</li>
+		<li class="list-group-item">
+			Radio Group &nbsp; 
+			<a href="javascript: void(0)" ng-click="createElement(radioGroup);">
+				<i class="fa fa-pencil-square-o fa-2x"></i>
+			</a>
+		</li>
+		<li class="list-group-item text-center">
+			<button class="btn btn-primary" type="button" ng-click="saveForm()">Save</button>
+		</li>
+	</ul>
+
+
+</div>
+
+<div class="container">
+<div class="row">
+	<div class="col-lg-6 col-lg-offset-3">
+		<ul class="list-group sortable" id="formItems">
+			<li class="list-group-item well" ng-repeat="input in formElements| orderBy:'displayOrder'">
+				<div class="text-right">
+					<button class="btn btn-primary btn-xs" ng-click="togglePropertiesSection(input.type);populateFieldPropertyForm($index)">
+						<i class="fa fa-pencil"></i>
+					</button>&nbsp;&nbsp;
+					<button class="btn btn-warning btn-xs" ng-click="removeFormElement($index)">
+						<i class="fa fa-remove"></i>
+					</button>	
+				</div>
+				
+				<custom-input input="input"></custom-input>
+			</li>
+		</ul>	
+	</div>
+	<div class="col-lg-3" ng-class="{'ng-hide': inputTextPropertiesHidden == true}">
+		<h4 class="page-header text-center">Text Input Properties</h4>
+		<div class="form-group">
+			<label>Label</label>
+			<input type="text" class="form-control" ng-model="editTextInputForm.label">
+		</div>
+		<div class="form-group">
+			<label>Placeholder</label>
+			<input type="text" class="form-control" ng-model="editTextInputForm.placeholder">
+		</div>
+		<div class="form-group">
+			<label>Default Value</label>
+			<input type="text" class="form-control" ng-model="editTextInputForm.value">
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-6">
+					<label>Display Order</label>		
+				</div>
+				<div class="col-lg-6">
+					<select class="form-control" ng-model="editTextInputForm.displayOrder">
+						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
+							{{input.displayOrder}}
+						</option>
+					</select>
+				</div>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-lg-6 text-center">
+				<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties('text')">Save</button>		
+			</div>
+			<div class="col-lg-6 text-center">
+				<button class="btn btn-warning btn-sm btn-block" ng-click="togglePropertiesSection('text')">Hide</button>		
+			</div>
+		</div>		
+	</div>
+	<div class="col-lg-3" ng-class="{'ng-hide': inputTextareaPropertiesHidden == true}">
+		<h4 class="page-header text-center">Textarea Input Properties</h4>
+		<div class="form-group">
+			<label>Label</label>
+			<input type="text" class="form-control" ng-model="editTextareaInputForm.label">
+		</div>
+		<div class="form-group">
+			<label>Placeholder</label>
+			<input type="text" class="form-control" ng-model="editTextareaInputForm.placeholder">
+		</div>
+		<div class="form-group">
+			<label>Default Value</label>
+			<input type="text" class="form-control" ng-model="editTextareaInputForm.value">
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-6">
+					<label>Display Order</label>		
+				</div>
+				<div class="col-lg-6">
+					<select class="form-control" ng-model="editTextareaInputForm.displayOrder">
+						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
+							{{input.displayOrder}}
+						</option>
+					</select>
+				</div>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-lg-6 text-center">
+				<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties('textarea')">Save</button>		
+			</div>
+			<div class="col-lg-6 text-center">
+				<button class="btn btn-warning btn-sm btn-block" ng-click="togglePropertiesSection('textarea')">Hide</button>		
+			</div>
+		</div>		
+	</div>
+	<div class="col-lg-3" ng-class="{'ng-hide': inputSelectPropertiesHidden == true}">
+		<h4 class="page-header text-center">Select Input Properties</h4>
+		<div class="form-group">
+			<label>Label</label>
+			<input type="text" class="form-control" ng-model="editSelectInputForm.label">
+		</div>
+		<div class="form-group">
+			<label>Default Value</label>
+			<select class="form-control" ng-model="editSelectInputForm.value">
+				<option value="">--select--</option>
+				<option ng-repeat="option in editSelectInputForm.optionValues" value="{{option.value}}">{{option.text}}</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>
+				<span>
+					Option Values &nbsp; 
+					<button class="btn btn-primary btn-xs" ng-click="addSelectInputOption()">
+						<i class="fa fa-plus"></i>
+					</button>
+				</span>
+			</label>
+			<div class="row">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Value</th>
+							<th>Text</th>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="opt in editSelectInputForm.optionValues">
+							<td>
+								<input type="text" ng-model="opt.value" class="form-control">
+							</td>
+							<td>
+								<input type="text" ng-model="opt.text" class="form-control">			
+							</td>
+							<td>
+								<button class="btn btn-danger btn-xs" ng-click="removeSelectOption($index)">
+									<i class="fa fa-remove"></i>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-6">
+					<label>Display Order</label>		
+				</div>
+				<div class="col-lg-6">
+					<select class="form-control" ng-model="editSelectInputForm.displayOrder">
+						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
+							{{input.displayOrder}}
+						</option>
+					</select>
+				</div>
+			</div>			
+		</div>
+		<div class="row">
+			<div class="col-lg-6 text-center">
+				<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties('select')">Save</button>		
+			</div>
+			<div class="col-lg-6 text-center">
+				<button class="btn btn-warning btn-sm btn-block" ng-click="togglePropertiesSection('select')">Hide</button>		
+			</div>
+		</div>		
+	</div>
+</div>
+</div>
+<!-- 
+<div class="container" id="container" style="width: 40%; border: 1px solid #ccc; height: 800px;">
+	
+</div> -->
+
+
+<!-- <script type="text/javascript">
+	
+$(function() {
+	$('.sortable').sortable();
+	
+});
+
+</script> -->
+<script type="text/javascript" src="js/templateCreationModule.js"></script>
+<script type="text/javascript" src="js/directives.js"></script>
+</body>
+</html>

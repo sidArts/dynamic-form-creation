@@ -1,0 +1,11 @@
+{
+  "name": "dynamictemplate",
+  "version": "1.0.0",
+  "description": "Create a dynamic forms using jQuery UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
