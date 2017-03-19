@@ -2,7 +2,8 @@
 <head>
 
   <link rel="stylesheet" type="text/css" href="bootstrap.css">
-  <style>
+  <script type="text/javascript" src="jquery.js"></script>
+  <!-- <style>
    .form-control {
   display: block;
  /* width: 100%; */
@@ -21,36 +22,50 @@
        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
           transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
-  </style>
+  </style> -->
   <script src="angular.js"></script>
   <script>
     angular.module('app', [])
     .controller('appController', function($scope, $http) {
-	$scope.forms = [];
+    	$scope.forms = [];
 
-	$scope.getForms = function() {
-	$http.get('/forms').then(function(res){
-	 console.log(res.data);
-         $scope.forms = res.data;
-	}, function(err){
-	 console.log(err);
-	});
+    	$scope.getForms = function() {
+    	$http.get('/forms').then(function(res){
+    	 console.log(res.data);
+             $scope.forms = res.data;
+    	}, function(err){
+    	 console.log(err);
+    	});
 	};
 	
     });
   </script>
+  <script src="js/directives.js"></script>
 </head>
-<body ng-controller="appController" ng-init="getForms()" style="position: relative;">
+<body ng-controller="appController" ng-init="getForms()">
  <h1 class="text-center">Hello, Node </h1>
 
- <div ng-repeat="form in forms">
+ <div class="container">
+   <div class="row">
+     <div class="col-lg-6 col-lg-offset-3" ng-repeat="form in forms">
+      <h3 class="text-center">{{form.title}}</h3>
+      <div class="form-group" ng-repeat="input in form.inputs">
+        <!-- <label>{{input.label}}</label> -->
+        <custom-input input="input"></custom-input>
+      </div>  
+      <button class="btn btn-primary">Submit</button>   
+     </div>
+   </div>
+ </div>
+
+ <!-- <div ng-repeat="form in forms">
  	<h3 class="text-center">{{form.title}}</h3>
-	<div class="form-group" ng-repeat="input in form.inputs" style="position: absolute; top: {{input.position.top}}px; left: {{input.position.left}}px;">
-	  <label>{{input.label}}</label>
-          <input type="{{input.input.type}}" class="{{input.input.class}}" placeholder="{{input.input.placeholder}}" size="{{input.input.size}}">
+	<div class="form-group" ng-repeat="input in form.inputs">
+	  <label>{{input.label}}</label> 
+    <custom-input input="input"></custom-input>
 	</div>
 
- </div>
+ </div> -->
 </body>
 
 </html>
