@@ -43,11 +43,12 @@
   <script src="js/directives.js"></script>
 </head>
 <body ng-controller="appController" ng-init="getForms()">
- <h1 class="text-center">Hello, Node </h1>
+ <h1 class="page-header text-center">Dynamic Form Creation</h1>
 
  <div class="container">
    <div class="row">
-     <div class="col-lg-6 col-lg-offset-3" ng-repeat="form in forms">
+     <div class="col-lg-6 col-lg-offset-3" ng-repeat="form in forms" ng-if="form.viewMode == 'Single Column View'">
+
       <h3 class="text-center">{{form.title}}</h3>
       <div class="form-group" ng-repeat="input in form.inputs">
         <!-- <label>{{input.label}}</label> -->
@@ -55,6 +56,19 @@
       </div>  
       <button class="btn btn-primary">Submit</button>   
      </div>
+     <div class="col-lg-6 col-lg-offset-3" ng-repeat="form in forms" ng-if="form.viewMode == 'Double Column View'">
+
+      <h3 class="text-center">{{form.title}}</h3>
+      <div class="row">
+      <div class="col-lg-6" ng-repeat="input in form.inputs">
+      <div class="form-group" >
+        <!-- <label>{{input.label}}</label> -->
+        <custom-input input="input"></custom-input>
+      </div>  
+      </div>
+      
+     </div>
+     <button class="btn btn-primary">Submit</button>   
    </div>
  </div>
 

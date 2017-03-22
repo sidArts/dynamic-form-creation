@@ -2,11 +2,25 @@
 angular.module('app', [])
 	.controller('appController', function($scope, $http, $timeout) {
 
+		$scope.form = {};
+		$scope.form.viewMode = 'Single Column View';
 		$scope.formElements = [];
 
 		$scope.editInputModel = {};
 		$scope.editInputIndex = 0;
 		
+		$scope.abc = 'sjgjsjfsjhgfsj';
+
+		$scope.users = [{
+			name: "sid",
+			email: "sid@mail"
+		},{
+			name: "abc",
+			email: "abc@mail.com"
+		}, {
+			name: "xyz",
+			email: "ddskl"
+		}];
 		
 		$scope.textInput = {
 			"label": "Input Label",
@@ -110,10 +124,8 @@ angular.module('app', [])
 
 		$scope.saveForm = function() {
 			console.log($scope.formElements);
-			var data = {
-				title: "Sample Form",
-				inputs: $scope.formElements
-			}
+			var data = angular.copy($scope.form);
+			data.inputs = angular.copy($scope.formElements);
 			$http.post('/', data)
 			.then(function(res) {
 				console.log(res);
@@ -122,6 +134,11 @@ angular.module('app', [])
 			});
 			
 
+		};
+
+		$scope.viewJson = function(){
+			$('#jsonViewModalBody').html('<pre>'+JSON.stringify(angular.copy($scope.formElements), null, 4)+ '</pre>');
+			$('#jsonView').modal('show');
 		};
 
 	});

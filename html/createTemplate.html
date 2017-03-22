@@ -14,6 +14,13 @@
 <body ng-controller="appController">
 
 <div class="container">
+<h1>{{abc}}</h1>
+
+<div class="row">
+	<ul>
+		<li></li>
+	</ul>
+</div>
 <div class="row">
 	<div class="col-lg-3">
 		<ul class="list-group">
@@ -47,11 +54,25 @@
 					<i class="fa fa-pencil-square-o fa-2x"></i>
 				</a>
 			</li>
-			<li class="list-group-item text-center">
+			<li class="list-group-item">
+				<label>Title &nbsp;</label>
+				<input type="text" class="form-control" ng-model="form.title">
+			</li>
+			<li class="list-group-item">
+				<label>View Mode &nbsp;</label>
+				<select class="form-control" ng-model="form.viewMode">
+					<option value="Single Column View">Single Column View</option>
+					<option value="Double Column View">Double Column View</option>
+				</select>
+			</li>
+			<li class="list-group-item">
 				<button class="btn btn-primary" type="button" ng-click="saveForm()">Save</button>
+				&nbsp;&nbsp;
+				<button class="btn btn-primary" type="button" ng-click="viewJson()">JSON</button>
 			</li>
 		</ul>
 	</div>
+	
 	<div class="col-lg-6">
 		<ul class="list-group sortable" id="formItems">
 			<li class="list-group-item well well-sm" ng-repeat="input in formElements">
@@ -74,7 +95,6 @@
 			</li>
 		</ul>	
 	</div>
-	<!-- <div class="col-lg-3" ng-class="{'ng-hide': inputTextPropertiesHidden == true}"> -->
 	<div class="col-lg-3" ng-if="editInputModel.type == 'text'">
 		<h4 class="page-header text-center">Text Input Properties</h4>
 		<div class="form-group">
@@ -114,7 +134,6 @@
 			</div>
 		</div>		
 	</div>
-	<!-- <div class="col-lg-3" ng-class="{'ng-hide': inputTextareaPropertiesHidden == true}"> -->
 	<div class="col-lg-3" ng-if="editInputModel.type == 'textarea'">
 		<h4 class="page-header text-center">Textarea Input Properties</h4>
 		<div class="form-group">
@@ -152,7 +171,6 @@
 			</div>
 		</div>		
 	</div>
-	<!-- <div class="col-lg-3" ng-class="{'ng-hide': inputSelectPropertiesHidden == true}"> -->
 	<div class="col-lg-3" ng-if="editInputModel.type == 'select'">
 		<h4 class="page-header text-center">Select Input Properties</h4>
 		<div class="form-group">
@@ -226,7 +244,6 @@
 		</div>		
 	</div>
 
-	<!-- <div class="col-lg-3" ng-class="{'ng-hide': inputCheckboxPropertiesHidden == true}"> -->
 	<div class="col-lg-3" ng-if="editInputModel.type == 'checkbox'">
 		<h4 class="page-header text-center">Checkbox Properties</h4>
 		<div class="form-group">
@@ -275,7 +292,6 @@
 		</div>		
 	</div>
 
-	<!-- <div class="col-lg-3" ng-class="{'ng-hide': inputRadioPropertiesHidden == true}"> -->
 	<div class="col-lg-3" ng-if="editInputModel.type == 'radio'">
 		<h4 class="page-header text-center">Radio Button Properties</h4>
 		<div class="form-group">
@@ -332,6 +348,25 @@
 		</div>		
 	</div>
 </div>
+</div>
+<div id="jsonView" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Form Elements JSON</h4>
+      </div>
+      <div class="modal-body" id="jsonViewModalBody">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 <script type="text/javascript" src="js/templateCreationModule.js"></script>
 <script type="text/javascript" src="js/directives.js"></script>
