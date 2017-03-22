@@ -141,6 +141,9 @@ angular.module('app', [])
 			$('#jsonView').modal('show');
 		};
 
+		$scope.hideInputPropertiesSection = function() {
+			$scope.editInputModel = {};
+		};
 	});
 	
 } )();
