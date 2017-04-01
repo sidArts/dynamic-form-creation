@@ -52,12 +52,68 @@ app.get('/forms', function(req, res) {
  });
 });
 
+var apiRoutes = express.Router(); 
+
+// route middleware to verify a token
+apiRoutes.use(function(req, res, next) {
+
+  // check header or url parameters or post parameters for token
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  // decode token
+  if (token) {
+
+  	JSONWebToken.findOne({
+    	token: req.headers['x-access-token']
+  	}, function(err, tokenObject) {
+  		if(err) throw err;
+
+  		console.log('Token Object %%%',tokenObject);
+  		var now = new Date().getTime();
+  		if((now - tokenObject.lastAccessed) > 3600) {
+  			jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+		      if (err) {
+		        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+		      } else {
+		      	console.log('Decoded token :::: ',decoded);
+		        // if everything is good, save to request for use in other routes
+		        req.decoded = decoded; 
+		        var query = { token: token };
+	            var newData = query;
+	            newData.lastAccessed = new Date().getTime();
+	            JSONWebToken.findOneAndUpdate(query, newData, {upsert:true}, function(err, doc){
+	                if (err) return res.send(500, { error: err });
+	                return res.send("LAst Accessed time modified!");
+	            });   
+		        next();
+		      }
+		    });
+  		} else {
+  			console.log('Token Expired *****');
+  		}
+ 	});
+
+    // verifies secret and checks exp
+    
+
+  } else {
+
+    // if there is no token
+    // return an error
+    return res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    });
+    
+  }
+});
+
 app.get('/createTemplate', function(req, res) {
 	res.sendFile('createTemplate.html');
 });
 
 app.get('/myTemplates', function(req, res){
-	
+
 });
 
 

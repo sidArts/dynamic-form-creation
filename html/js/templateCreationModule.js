@@ -53,7 +53,7 @@ angular.module('app', [])
 		$scope.radioGroup = {
 			"label": "Radio Label",
 			"type": "radio",
-			"value": "F",
+			"value": "",
 			"values": [{
 				"label": "Value 1",
 				"value": "V1"
@@ -94,6 +94,8 @@ angular.module('app', [])
 		$scope.removeFormElement = function(elementIndex){
 			
 			$scope.formElements.splice(elementIndex, 1);
+			if($scope.formElements.length == 0)
+				$scope.editInputModel.type = '';
 			
 		};
 
@@ -103,11 +105,18 @@ angular.module('app', [])
 				text: "option"
 			});
 		};
+
+		$scope.addRadioInputOption = function(){
+			$scope.editInputModel.values.push({
+				value: "value",
+				label: "option"
+			});
+		};
 		$scope.removeSelectOption = function(index){
 			$scope.editInputModel.optionValues.splice(index, 1);
 		};
 		$scope.removeRadioOption = function(index){
-			$scope.editInputModel.optionValues.splice(index, 1);
+			$scope.editInputModel.values.splice(index, 1);
 		};
 
 		$scope.moveUp = function(index){
