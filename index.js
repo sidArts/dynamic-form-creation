@@ -38,13 +38,6 @@ if(app.get('env') == 'development') {
 }
 
 mongoose.model('users', { name: String  });
-//mongoose.model('templateForms', {  }, 'templateForms' );
-
-/*var inputSchema = mongoose.Schema({
-
-});*/
-
-
 
 app.get('/users', function(req, res) {
  mongoose.model('users').find(function(err, users){
@@ -60,7 +53,11 @@ app.get('/forms', function(req, res) {
 });
 
 app.get('/createTemplate', function(req, res) {
- res.sendFile('createTemplate.html');
+	res.sendFile('createTemplate.html');
+});
+
+app.get('/myTemplates', function(req, res){
+	
 });
 
 

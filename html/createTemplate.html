@@ -12,7 +12,25 @@
 	
 </head>
 <body ng-controller="appController">
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <ul class="nav navbar-nav">
 
+    	<li><a href="/createTemplate.html">Create Template</a></li>
+		<li class="active"><a href="/myTemplates.html">My Templates</a></li>
+      
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+		<li><a href="#"><span class="fa fa-user"></span> Hello, </a></li>
+		<li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+  	</ul>
+
+  </div>
+</nav>
 <div class="container">
 <div class="row">
 	<div class="col-lg-3">
@@ -62,6 +80,8 @@
 				<button class="btn btn-primary" type="button" ng-click="saveForm()">Save</button>
 				&nbsp;&nbsp;
 				<button class="btn btn-primary" type="button" ng-click="viewJson()">JSON</button>
+				&nbsp;&nbsp;
+				<button class="btn btn-primary" type="button" ng-disabled="formElements.length == 0" data-target="#formPreview" data-toggle="modal">Preview</button>
 			</li>
 		</ul>
 	</div>
@@ -102,20 +122,6 @@
 			<label>Default Value</label>
 			<input type="text" class="form-control" ng-model="editInputModel.value">
 		</div>
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<label>Display Order</label>		
-				</div>
-				<div class="col-lg-6">
-					<select class="form-control" ng-init="editInputModel.displayOrder = formElements[editInputIndex].displayOrder" ng-model="editInputModel.displayOrder">
-						<option ng-repeat="input in formElements" value="{{input.displayOrder}}">
-							{{input.displayOrder}}
-						</option>
-					</select>
-				</div>
-			</div>	
-		</div>
 		<div class="row">
 			<div class="col-lg-6 text-center">
 				<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
@@ -140,20 +146,6 @@
 		<div class="form-group">
 			<label>Default Value</label>
 			<input type="text" class="form-control" ng-model="editInputModel.value">
-		</div>
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<label>Display Order</label>		
-				</div>
-				<div class="col-lg-6">
-					<select class="form-control" ng-model="editInputModel.displayOrder">
-						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
-							{{input.displayOrder}}
-						</option>
-					</select>
-				</div>
-			</div>	
 		</div>
 		<div class="row">
 			<div class="col-lg-6 text-center">
@@ -213,20 +205,6 @@
 				</table>
 			</div>
 		</div>
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<label>Display Order</label>		
-				</div>
-				<div class="col-lg-6">
-					<select class="form-control" ng-model="editInputModel.displayOrder">
-						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
-							{{input.displayOrder}}
-						</option>
-					</select>
-				</div>
-			</div>			
-		</div>
 		<div class="row">
 			<div class="col-lg-6 text-center">
 				<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">Save</button>		
@@ -260,20 +238,6 @@
 					</tr>
 				</tbody>
 			</table>			
-		</div>
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<label>Display Order</label>		
-				</div>
-				<div class="col-lg-6">
-					<select class="form-control" ng-model="editCheckboxInputForm.displayOrder">
-						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
-							{{input.displayOrder}}
-						</option>
-					</select>
-				</div>
-			</div>	
 		</div>
 		<div class="row">
 			<div class="col-lg-6 text-center">
@@ -317,20 +281,6 @@
 				</tbody>				
 			</table>
 		</div>
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<label>Display Order</label>		
-				</div>
-				<div class="col-lg-6">
-					<select class="form-control" ng-model="editInputModel.displayOrder">
-						<option ng-repeat="input in formElements| orderBy:'displayOrder'" value="{{input.displayOrder}}">
-							{{input.displayOrder}}
-						</option>
-					</select>
-				</div>
-			</div>	
-		</div>
 		<div class="row">
 			<div class="col-lg-6 text-center">
 				<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties('radio')">Save</button>		
@@ -361,7 +311,51 @@
 
   </div>
 </div>
+<div id="formPreview" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Preview</h4>
+		</div>
+		<div class="modal-body">
+	        <div class="row well">
+				<div class="col-lg-6 col-lg-offset-3" ng-if="form.viewMode == 'Single Column View'">
+
+					<h3 class="text-center page-header">{{form.title}}</h3>
+					<div class="form-group" ng-repeat="input in formElements">
+						<custom-input input="input"></custom-input>
+					</div>  
+					
+					<button class="btn btn-primary">Submit</button>   
+				</div>
+				<div class="col-lg-6 col-lg-offset-3" ng-if="form.viewMode == 'Double Column View'">
+
+					<h3 class="text-center page-header">{{form.title}}</h3>
+					<div class="row">
+						<div class="col-lg-6" ng-repeat="input in formElements">
+							<div class="form-group" >
+								<custom-input input="input"></custom-input>
+							</div>  
+						</div>
+					</div>
+					<button class="btn btn-primary">Submit</button>   
+				</div>
+			</div>
+	  	</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript" src="js/templateCreationModule.js"></script>
 <script type="text/javascript" src="js/directives.js"></script>
 </body>
 </html>
+
+
+
+
+

@@ -144,6 +144,10 @@ angular.module('app', [])
 		$scope.hideInputPropertiesSection = function() {
 			$scope.editInputModel = {};
 		};
+
+		$scope.previewForm = function(){
+
+		};
 	});
 	
 } )();
