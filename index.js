@@ -200,9 +200,37 @@ apiRoutes.get('/forms', function(req, res) {
   
 });
 
+apiRoutes.get('/form/:id', function(req, res) {
+  var formId = req.params.id;
+  var token = req.headers['x-access-token'];
+  JSONWebToken.findOne({
+    token: token
+  }, function(err, tokenObject) {
+      if(err) throw err;
+
+      jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+          if (err) {
+            res.status(403).send('Invalid Token');    
+          } else {
+              var data = {};
+              data.createdBy = decoded._doc._id;
+              data._id = mongoose.Types.ObjectId(formId);
+              console.log(data);
+              mongoose.model('templateForms').findOne(data, function(err, forms){
+                res.send(forms);
+              });
+          }
+      });    
+  });  
+  
+});
+
 
 apiRoutes.post('/createTemplate', function(req, res) {
-	res.render('createTemplate', {token: req.body.token});
+  console.log('Form ID :::: ', req.body.formId);
+  var id = (req.body.formId != undefined && req.body.formId != null) ? req.body.formId : 0;
+
+	res.render('createTemplate', {token: req.body.token, formId: id });
 });
 
 apiRoutes.post('/myTemplates', function(req, res){
@@ -223,11 +251,26 @@ apiRoutes.post('/saveTemplate', function(req, res) {
               var data = req.body;
               data.createdBy = decoded._doc._id;
               console.log(data);
+              
 
-             new Template(data).save(function(err, doc) {
-              if(err) console.log(err);
-              else res.send('successfully inserted');
-             });
+              if(data._id != undefined) {
+                Template.findOneAndUpdate({
+                  _id: mongoose.Types.ObjectId(data._id)
+                }, data, {upsert:false}, function(err, doc){
+                    
+                    if (err) return res.send(500, { error: err });
+                    
+                    else res.send('successfully inserted');
+                });
+              } else {
+                  new Template(data).save(function(err, doc) {
+                    if(err) console.log(err);
+                    else res.send('successfully inserted');
+                   });
+              }
+              
+
+             
           }
       });
 

@@ -1,6 +1,26 @@
 ( function(){
 angular.module('app', [])
-	.controller('appController', function($scope, $http) {
+	.controller('appController', function($scope, $http, $window) {
+
+		var init = function(){
+			$http.get('/api/form/'+ $window.formId,{
+            headers: {
+              'x-access-token': document.navigation.token.value
+            }
+          	}).then(function(res){
+        	 	console.log(res.data);
+        	 	$scope.form._id = res.data._id;
+                $scope.form.title = res.data.title;
+                $scope.form.viewMode = res.data.viewMode;
+                $scope.formElements  = res.data.inputs;
+        	}, function(err){
+        	 	console.log(err);
+        	});
+		};
+
+		if($window.formId != undefined && $window.formId != '') {
+			init();
+		}
 
 		$scope.form = {};
 		$scope.form.title = 'Sample Form';
@@ -62,6 +82,7 @@ angular.module('app', [])
 			}]
 		};
 
+		
 		
 
 		$scope.createElement = function(elementType) {

@@ -45,7 +45,7 @@
 						<th>Title</th>
 						<th>View Type</th>
 						<th>Field Count</th>
-						<th>ID</th>
+						<!-- <th>ID</th> -->
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -55,12 +55,12 @@
 						<td>{{form.title}}</td>
 						<td>{{form.viewMode}}</td>
 						<td>{{form.inputs.length}}</td>
-						<td>{{form.createdBy}}</td>
+						<!-- <td>{{form._id}}</td> -->
 						<td>
-							<button class="btn btn-primary btn-xs">
+							<button class="btn btn-primary btn-xs" ng-click="editForm(form._id)">
 								<i class="fa fa-pencil"></i>
 							</button>
-							<button class="btn btn-danger btn-xs">
+							<button class="btn btn-danger btn-xs" ng-click="deleteForm(form._id)">
 								<i class="fa fa-remove"></i>
 							</button>
 						</td>
@@ -79,6 +79,20 @@
 		$scope.goto = function(page){
 			document.navigation.action = page;
 			document.navigation.submit();
+		};
+		$scope.editForm = function(id){
+			document.navigation.action = '/api/createTemplate';
+			$(document.navigation).append($('<input>', { type: 'hidden', name: 'formId', value: id }));
+			document.navigation.submit();
+		};
+		$scope.deleteForm = function(id){
+
+			if(prompt('Are you sure want to delete?')) {
+				document.navigation.action = '/api/deleteTemplate';
+				document.navigation.formId.value = id;
+				document.navigation.submit();	
+			}
+			
 		};
 		$scope.getForms = function() {
         	$http.get('/api/forms',{
