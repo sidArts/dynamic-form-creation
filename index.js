@@ -228,8 +228,7 @@ apiRoutes.get('/form/:id', function(req, res) {
 
 apiRoutes.post('/createTemplate', function(req, res) {
   console.log('Form ID :::: ', req.body.formId);
-  var id = (req.body.formId != undefined && req.body.formId != null) ? req.body.formId : 0;
-
+  var id = (req.body.formId != undefined && req.body.formId != null) ? req.body.formId : '';
 	res.render('createTemplate', {token: req.body.token, formId: id });
 });
 
@@ -238,7 +237,7 @@ apiRoutes.post('/myTemplates', function(req, res){
 });
 
 apiRoutes.post('/saveTemplate', function(req, res) {
-   var token = req.headers['x-access-token'];
+  var token = req.headers['x-access-token'];
   JSONWebToken.findOne({
     token: token
   }, function(err, tokenObject) {
@@ -250,9 +249,6 @@ apiRoutes.post('/saveTemplate', function(req, res) {
           } else {
               var data = req.body;
               data.createdBy = decoded._doc._id;
-              console.log(data);
-              
-
               if(data._id != undefined) {
                 Template.findOneAndUpdate({
                   _id: mongoose.Types.ObjectId(data._id)
@@ -267,17 +263,39 @@ apiRoutes.post('/saveTemplate', function(req, res) {
                     if(err) console.log(err);
                     else res.send('successfully inserted');
                    });
-              }
-              
-
-             
+              }    
           }
       });
+  });   
+});
 
-      
-  });  
- 
- 
+apiRoutes.delete('/deleteTemplate/:formId', function(req, res){
+  var token = req.headers['x-access-token'];
+  JSONWebToken.findOne({
+    token: token
+  }, function(err, tokenObject) {
+      if(err) throw err;
+
+      jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+          if (err) {
+            res.status(403).send('Invalid Token');    
+          } else {
+            var data = mongoose.Types.ObjectId(req.params.formId);
+            data.createdBy = decoded._doc._id;
+            Template.findOne(data, function(err, doc){
+              if(err)
+                res.status(500).send(err);
+              else 
+                doc.remove(function(err){
+                  if(err)
+                    res.send(500, err);
+                  else
+                    res.send(204);
+                });
+            });
+          }
+      });
+    });
 });
 
 app.get('/', function(request, response){ 

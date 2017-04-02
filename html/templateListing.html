@@ -60,7 +60,7 @@
 							<button class="btn btn-primary btn-xs" ng-click="editForm(form._id)">
 								<i class="fa fa-pencil"></i>
 							</button>
-							<button class="btn btn-danger btn-xs" ng-click="deleteForm(form._id)">
+							<button class="btn btn-danger btn-xs" ng-click="deleteForm(form._id, $index)">
 								<i class="fa fa-remove"></i>
 							</button>
 						</td>
@@ -82,15 +82,23 @@
 		};
 		$scope.editForm = function(id){
 			document.navigation.action = '/api/createTemplate';
-			$(document.navigation).append($('<input>', { type: 'hidden', name: 'formId', value: id }));
+			$(document.navigation).append($('<input>', { type: 'hidden', id: 'formId', name: 'formId', value: id }));
 			document.navigation.submit();
 		};
-		$scope.deleteForm = function(id){
+		$scope.deleteForm = function(id, rowIndex){
 
-			if(prompt('Are you sure want to delete?')) {
-				document.navigation.action = '/api/deleteTemplate';
-				document.navigation.formId.value = id;
-				document.navigation.submit();	
+			if(confirm('Are you sure want to delete?')) {
+				$http.delete('/api/deleteTemplate/'+ id,{
+		            headers: {
+		              'x-access-token': document.navigation.token.value
+		            }
+	          	}).then(function(res){
+	        	 	console.log(res.data);
+	        	 	$scope.forms.splice(rowIndex, 1);
+	        	 	alert('Form deleted!');
+	        	}, function(err){
+	        	 	console.log(err);
+	        	});
 			}
 			
 		};
