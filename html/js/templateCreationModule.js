@@ -1,16 +1,15 @@
 ( function(){
 angular.module('app', [])
-	.controller('appController', function($scope, $http, $timeout) {
+	.controller('appController', function($scope, $http) {
 
 		$scope.form = {};
+		$scope.form.title = 'Sample Form';
 		$scope.form.viewMode = 'Single Column View';
 		$scope.formElements = [];
 
 		$scope.editInputModel = {};
 		$scope.editInputIndex = 0;
 		
-		$scope.abc = 'sjgjsjfsjhgfsj';
-
 		$scope.users = [{
 			name: "sid",
 			email: "sid@mail"
@@ -95,7 +94,7 @@ angular.module('app', [])
 			
 			$scope.formElements.splice(elementIndex, 1);
 			if($scope.formElements.length == 0)
-				$scope.editInputModel.type = '';
+				$scope.hideInputPropertiesSection();
 			
 		};
 
@@ -135,7 +134,11 @@ angular.module('app', [])
 			console.log($scope.formElements);
 			var data = angular.copy($scope.form);
 			data.inputs = angular.copy($scope.formElements);
-			$http.post('/', data)
+			$http.post('/api/saveTemplate', data, {
+				headers: {
+					'x-access-token': document.navigation.token.value
+				}
+			})
 			.then(function(res) {
 				console.log(res);
 			}, function(err) {
@@ -154,9 +157,11 @@ angular.module('app', [])
 			$scope.editInputModel = {};
 		};
 
-		$scope.previewForm = function(){
-
+		$scope.goto = function(page){
+			document.navigation.action = '/api/'+page;
+			document.navigation.submit();
 		};
+
 	});
 	
 } )();

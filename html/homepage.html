@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en-us" >
+<head>
+	<title></title>
+</head>
+<body ng-app="app" ng-controller="appController">
+
+<form name="navigation" method="post">	
+	<input type="hidden" id="Authorization" name="token" value="<%=  token %>">
+</form>
+
+
+
+<h1>Login Successfull!</h1>
+
+
+<a href="#" ng-click="goto('createTemplate')">Create A Template</a>
+<a href="#" ng-click="goto('myTemplates')">My Templates</a>
+
+<script type="text/javascript" src="/angular.js"></script>
+<script type="text/javascript">
+(function(){
+	angular.module('app', [])
+	.controller('appController', function($scope){
+		
+		$scope.goto = function(page){
+			console.log('adfadsf');
+			document.navigation.action = page;
+			document.navigation.submit();
+		};
+	});
+}());
+</script>
+
+</body>
+</html>
