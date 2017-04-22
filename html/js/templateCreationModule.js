@@ -5,26 +5,6 @@ angular.module('app', [])
 		$scope.isArray = angular.isArray;
 		$scope.isObject = angular.isObject;
 
-		var init = function(){
-			$http.get('/api/form/'+ $window.formId,{
-            headers: {
-              'x-access-token': document.navigation.token.value
-            }
-          	}).then(function(res){
-        	 	console.log(res.data);
-        	 	$scope.form._id = res.data._id;
-                $scope.form.title = res.data.title;
-                $scope.form.viewMode = res.data.viewMode;
-                $scope.formElements  = res.data.inputs;
-        	}, function(err){
-        	 	console.log(err);
-        	});
-		};
-
-		if($window.formId != undefined && $window.formId != '') {
-			init();
-		}
-
 		$scope.form = {};
 		$scope.form.backgroundColor = 'fff';
 		$scope.form.viewMode = 'Single Column View';
@@ -34,6 +14,31 @@ angular.module('app', [])
 
 		$scope.editInputModel = {};
 		$scope.editInputIndex = 0;
+
+		var init = function(){
+			$http.get('/api/form/'+ $window.formId,{
+            headers: {
+              'x-access-token': document.navigation.token.value
+            }
+          	}).then(function(res){
+        	 	console.log(res.data);
+        	 	$scope.form._id = res.data._id;
+                $scope.form.viewMode = res.data.viewMode;
+                $scope.form.backgroundColor = res.data.backgroundColor;
+                $scope.formElements  = res.data.inputs;
+                $scope.sortFormElements();
+                console.log($('#jscolor'));
+                $('#jscolor').trigger('change');
+        	}, function(err){
+        	 	console.log(err);
+        	});
+		};
+
+		if($window.formId != undefined && $window.formId != '') {
+			init();
+		}
+
+		
 		
 		$scope.users = [{
 			name: "sid",

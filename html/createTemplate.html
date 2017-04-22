@@ -20,10 +20,10 @@
     </div>
     <ul class="nav navbar-nav">
 
-    	<li class="<%= (activeTab == 'createTemplate') ? 'active' : '' %>">
+    	<li class="active">
     		<a href="#" ng-click="goto('createTemplate')">Create Template</a>
 		</li>
-		<li class="<%= (activeTab == 'myTemplates') ? 'active' : '' %>">
+		<li>
 			<a href="#" ng-click="goto('myTemplates')">My Templates</a>
 		</li>
       
@@ -50,7 +50,7 @@
 				<li class="list-group-item">
 					<span>Background &nbsp;</span>
 					<span>
-						<input type="text" class="jscolor" ng-model="form.backgroundColor">
+						<input type="text" class="jscolor" id="jscolor" ng-model="form.backgroundColor">
 					</span>
 				</li>
 
@@ -185,28 +185,33 @@
 			<h4 class="modal-title">Preview</h4>
 		</div>
 		<div class="modal-body">
-	        <div class="row well">
-				<div class="col-lg-6 col-lg-offset-3" ng-if="form.viewMode == 'Single Column View'">
+			<div style="width: 95%; margin: auto;">
+	        <div class="row" style="background-color: #{{form.backgroundColor}}">
+				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
 
-					<h3 class="text-center page-header">{{form.title}}</h3>
-					<div class="form-group" ng-repeat="input in formElements">
+					<!-- <h1 class="page-header">{{form.title}}</h1> -->
+					<div class="form-group" ng-repeat="input in preview">
 						<custom-input input="input"></custom-input>
 					</div>  
 					
-					<button class="btn btn-primary">Submit</button>   
+					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
 				</div>
-				<div class="col-lg-6 col-lg-offset-3" ng-if="form.viewMode == 'Double Column View'">
+				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
 
-					<h3 class="text-center page-header">{{form.title}}</h3>
-					<div class="row">
-						<div class="col-lg-6" ng-repeat="input in formElements">
+					<!-- <h3 class="text-center page-header">{{form.title}}</h3> -->
+					<div class="row" ng-repeat="row in preview">
+						<div class="col-lg-12" ng-if="isObject(row)">
+							<custom-input input="row"></custom-input>
+						</div>
+						<div class="col-lg-6" ng-if="isArray(row) && input != undefined" ng-repeat="input in row">
 							<div class="form-group" >
 								<custom-input input="input"></custom-input>
 							</div>  
 						</div>
 					</div>
-					<button class="btn btn-primary">Submit</button>   
+					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
 				</div>
+			</div>
 			</div>
 	  	</div>
 		<div class="modal-footer">

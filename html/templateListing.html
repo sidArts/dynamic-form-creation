@@ -21,7 +21,7 @@
 	    <li>
 	    	<a href="#" ng-click="goto('createTemplate')">Create Template</a>
 	    </li>
-    	<li>
+    	<li class="active">
 			<a href="#" ng-click="goto('myTemplates')">My Templates</a>
 		</li>
 
@@ -57,6 +57,9 @@
 						<td>{{form.inputs.length}}</td>
 						<!-- <td>{{form._id}}</td> -->
 						<td>
+							<button class="btn btn-default btn-xs" ng-click="previewForm($index)">
+								<i class="fa fa-eye"></i>
+							</button>
 							<button class="btn btn-primary btn-xs" ng-click="editForm(form._id)">
 								<i class="fa fa-pencil"></i>
 							</button>
@@ -71,10 +74,59 @@
 	</div>
 </div>
 
+<div id="formPreview" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Preview</h4>
+		</div>
+		<div class="modal-body">
+			<div style="width: 95%; margin: auto;">
+	        <div class="row" style="background-color: #{{form.backgroundColor}}">
+				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
+
+					<!-- <h1 class="page-header">{{form.title}}</h1> -->
+					<div class="form-group" ng-repeat="input in preview">
+						<custom-input input="input"></custom-input>
+					</div>  
+					
+					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
+				</div>
+				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
+
+					<!-- <h3 class="text-center page-header">{{form.title}}</h3> -->
+					<div class="row" ng-repeat="row in preview">
+						<div class="col-lg-12" ng-if="isObject(row)">
+							<custom-input input="row"></custom-input>
+						</div>
+						<div class="col-lg-6" ng-if="isArray(row) && input != undefined" ng-repeat="input in row">
+							<div class="form-group" >
+								<custom-input input="input"></custom-input>
+							</div>  
+						</div>
+					</div>
+					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
+				</div>
+			</div>
+			</div>
+	  	</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
 ( function(){
 	angular.module('app', [])
 	.controller('appController', function($scope, $http){
+
+		$scope.isArray = angular.isArray;
+		$scope.isObject = angular.isObject;
+		
 		$scope.forms = [];
 		$scope.goto = function(page){
 			document.navigation.action = page;
@@ -114,8 +166,50 @@
         	 	console.log(err);
         	});
     	};
+
+    	var sortFormElements = function(form) {
+			$scope.preview = [];
+			if(form.viewMode == 'Double Column View') {
+				var counter = 0;
+				var length = form.inputs.length/2;
+				for(var i = 0; i < length; i++) {
+					$scope.preview[i] = [];
+					for(var j = 0; j < 2; j++) {
+						if(form.inputs[ counter ] != undefined) {
+							if( form.inputs[ counter ].type == 'heading' ) {
+								if($scope.preview[i].length == 0) {									
+									$scope.preview[i] = angular.copy(form.inputs[ counter++ ]);
+									length++;
+								} else if($scope.preview[i].length == 1) {
+									$scope.preview[i].push(undefined);
+									length++;
+								}								
+								break;	
+							} else {
+								$scope.preview[ i ].push(angular.copy(form.inputs[ counter++ ]));	
+							}
+						}
+
+							
+					}
+				}
+			} else {
+				$scope.preview = angular.copy(form.inputs);
+			}
+		};
+
+    	$scope.previewForm = function(formIndex) {
+    		$scope.form = angular.copy($scope.forms[formIndex])
+    		sortFormElements(angular.copy($scope.forms[formIndex]));
+    		$('#formPreview').modal('show');
+
+    		console.log($scope.preview);
+    	}
 	});
 }());
 </script>
+
+<script type="text/javascript" src="/js/directives.js"></script>
+
 </body>
 </html>
