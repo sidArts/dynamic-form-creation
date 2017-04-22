@@ -229,11 +229,11 @@ apiRoutes.get('/form/:id', function(req, res) {
 apiRoutes.post('/createTemplate', function(req, res) {
   console.log('Form ID :::: ', req.body.formId);
   var id = (req.body.formId != undefined && req.body.formId != null) ? req.body.formId : '';
-	res.render('createTemplate', {token: req.body.token, formId: id });
+	res.render('createTemplate', {token: req.body.token, formId: id, activeTab: 'createTemplate' });
 });
 
 apiRoutes.post('/myTemplates', function(req, res){
-	res.render('templateListing', {token: req.body.token});
+	res.render('templateListing', {token: req.body.token, activeTab: 'myTemplates'});
 });
 
 apiRoutes.post('/saveTemplate', function(req, res) {

@@ -2,6 +2,9 @@
 angular.module('app', [])
 	.controller('appController', function($scope, $http, $window) {
 
+		$scope.isArray = angular.isArray;
+		$scope.isObject = angular.isObject;
+
 		var init = function(){
 			$http.get('/api/form/'+ $window.formId,{
             headers: {
@@ -23,9 +26,10 @@ angular.module('app', [])
 		}
 
 		$scope.form = {};
-		$scope.form.title = 'Sample Form';
 		$scope.form.viewMode = 'Single Column View';
 		$scope.formElements = [];
+
+		$scope.preview = [];
 
 		$scope.editInputModel = {};
 		$scope.editInputIndex = 0;
@@ -82,23 +86,65 @@ angular.module('app', [])
 			}]
 		};
 
+		$scope.heading = {
+			"type": "heading",
+			"text": "Heading 1",
+			"align": "center",
+			"size": "1"
+		};
+
 		
 		
 
 		$scope.createElement = function(elementType) {
 			var el = angular.copy(elementType);
 			el.displayOrder = ($scope.formElements.length + 1) + '';
-			console.log(el.displayOrder);
+			
 			$scope.formElements.push(el);
+			
+			$scope.sortFormElements();
+
+			console.log($scope.preview);
+				
+		};
+
+		$scope.sortFormElements = function() {
+			$scope.preview = [];
+			if($scope.form.viewMode == 'Double Column View') {
+				var counter = 0;
+				var length = $scope.formElements.length/2;
+				for(var i = 0; i < length; i++) {
+					$scope.preview[i] = [];
+					for(var j = 0; j < 2; j++) {
+						if($scope.formElements[ counter ] != undefined) {
+							if( $scope.formElements[ counter ].type == 'heading' ) {
+								if($scope.preview[i].length == 0) {									
+									$scope.preview[i] = angular.copy($scope.formElements[ counter++ ]);
+									length++;
+								} else if($scope.preview[i].length == 1) {
+									$scope.preview[i].push(undefined);
+									length++;
+								}								
+								break;	
+							} else {
+								$scope.preview[ i ].push(angular.copy($scope.formElements[ counter++ ]));	
+							}
+						}
+
+							
+					}
+				}
+			} else {
+				$scope.preview = angular.copy($scope.formElements);
+			}
 		};
 
 		$scope.editInput = function(input, inputIndex){
 			
 			$scope.editInputIndex = inputIndex;
 			$scope.editInputModel = angular.copy(input);
-
-			$scope.editInputIndex = inputIndex;
 			console.log('Editing TExt input form ::: ',$scope.editTextInputForm);
+			$('#editInputPropertiesModal').modal('show');
 
 		};
 
@@ -106,14 +152,16 @@ angular.module('app', [])
 			
 			$scope.formElements[$scope.editInputIndex] = angular.copy($scope.editInputModel);
 			console.log('Edit Model ::: ',$scope.editInputModel);
-			
+			$('#editInputPropertiesModal').modal('hide');			
+			$scope.sortFormElements();
 		};
 
 		
 
 		$scope.removeFormElement = function(elementIndex){
 			
-			$scope.formElements.splice(elementIndex, 1);
+			if(confirm('Are You sure want to remove this form element?'))
+				$scope.formElements.splice(elementIndex, 1);
 			if($scope.formElements.length == 0)
 				$scope.hideInputPropertiesSection();
 			
@@ -143,12 +191,18 @@ angular.module('app', [])
 			var temp = angular.copy($scope.formElements[index]);
 			$scope.formElements[index] = angular.copy($scope.formElements[index - 1]);
 			$scope.formElements[index - 1] = temp;
+			$scope.sortFormElements();
+			console.log('Form Elements ::: ', $scope.formElements);
+			console.log($scope.preview);
 		};
 
 		$scope.moveDown = function(index){
 			var temp = angular.copy($scope.formElements[index]);
 			$scope.formElements[index] = angular.copy($scope.formElements[index + 1]);
 			$scope.formElements[index + 1] = temp;	
+			$scope.sortFormElements();
+			console.log('Form Elements ::: ', $scope.formElements);
+			console.log($scope.preview);
 		};
 
 		$scope.saveForm = function() {

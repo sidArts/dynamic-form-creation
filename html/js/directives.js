@@ -1,7 +1,7 @@
 ( function(){
 
 angular.module('app')
-.directive('customInput', function(){
+.directive('customInput', function($compile){
 	return {
 		restrict: 'E',
 		scope: {
@@ -101,12 +101,19 @@ angular.module('app')
 					});
 					
 					break;
+				case "heading":					
+					var prop = { class: "page-header" };
+					prop["class"] = prop["class"] + " text-"+ $scope.input.align;
+					prop["text"] = $scope.input.text;
+					inputGroup = $('<h'+ $scope.input.size +'>', prop);
+					break;
 
 			}
 			if(inputGroup != null) {
 
 				
 				element.replaceWith(inputGroup);
+				$compile(inputGroup)($scope);
 			}
 		}	
 
