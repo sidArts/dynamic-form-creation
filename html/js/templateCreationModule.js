@@ -164,6 +164,8 @@ angular.module('app', [])
 				$scope.formElements.splice(elementIndex, 1);
 			if($scope.formElements.length == 0)
 				$scope.hideInputPropertiesSection();
+
+			$scope.sortFormElements();
 			
 		};
 
