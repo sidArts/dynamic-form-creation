@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="/jquery.js"></script>
 	<script type="text/javascript" src="/bootstrap.js"></script>
 	<script type="text/javascript" src="/angular.js"></script>
+	<script type="text/javascript" src="/js/jscolor.js"></script>
 </head>
 <body ng-controller="appController">
 <form name="navigation" method="post">	
@@ -46,6 +47,13 @@
 						<option value="Double Column View">Double Column View</option>
 					</select>
 				</li>
+				<li class="list-group-item">
+					<span>Background &nbsp;</span>
+					<span>
+						<input type="text" class="jscolor" ng-model="form.backgroundColor">
+					</span>
+				</li>
+
 				<li class="list-group-item">
 					Text Input &nbsp; 
 					<a href="javascript: void(0)" ng-click="createElement(textInput);">
@@ -120,8 +128,8 @@
 			</ul>	
 		</div>
 		<div class="col-lg-5">
-			<div class="row">
-				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'">
+			<div class="row" style="background-color: #{{form.backgroundColor}}">
+				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
 
 					<!-- <h1 class="page-header">{{form.title}}</h1> -->
 					<div class="form-group" ng-repeat="input in preview">
@@ -130,7 +138,7 @@
 					
 					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
 				</div>
-				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'">
+				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
 
 					<!-- <h3 class="text-center page-header">{{form.title}}</h3> -->
 					<div class="row" ng-repeat="row in preview">

@@ -26,6 +26,7 @@ angular.module('app', [])
 		}
 
 		$scope.form = {};
+		$scope.form.backgroundColor = 'fff';
 		$scope.form.viewMode = 'Single Column View';
 		$scope.formElements = [];
 
