@@ -108,6 +108,12 @@ angular.module('app')
 					inputGroup = $('<h'+ $scope.input.size +'>', prop);
 					break;
 
+				/*case "empty":
+					inputGroup = $("<div>", {
+						"class": "form-group"
+					});
+					break;*/
+
 			}
 			if(inputGroup != null) {
 

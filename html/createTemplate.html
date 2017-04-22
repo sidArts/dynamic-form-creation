@@ -2,12 +2,12 @@
 <html ng-app="app">
 <head>
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
-	<script type="text/javascript" src="/jquery.js"></script>
-	<script type="text/javascript" src="/bootstrap.js"></script>
-	<script type="text/javascript" src="/angular.js"></script>
-	<script type="text/javascript" src="/js/jscolor.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/css/lib/font-awesome.css">
+	<script type="text/javascript" src="/js/lib/jquery.js"></script>
+	<script type="text/javascript" src="/js/lib/bootstrap.js"></script>
+	<script type="text/javascript" src="/js/lib/angular.js"></script>
+	<script type="text/javascript" src="/js/lib/jscolor.js"></script>
 </head>
 <body ng-controller="appController">
 <form name="navigation" method="post">	
@@ -46,6 +46,10 @@
 						<option value="Single Column View">Single Column View</option>
 						<option value="Double Column View">Double Column View</option>
 					</select>
+				</li>
+				<li class="list-group-item">
+					<label>Title &nbsp;</label>
+					<input type="text" class="form-control" ng-model="form.title">
 				</li>
 				<li class="list-group-item">
 					<span>Background &nbsp;</span>
@@ -91,9 +95,12 @@
 					</a>
 				</li>
 				<!-- <li class="list-group-item">
-					<label>Title &nbsp;</label>
-					<input type="text" class="form-control" ng-model="form.title">
+					Empty &nbsp; 
+					<a href="javascript: void(0)" ng-click="createElement(empty);">
+						<i class="fa fa-pencil-square-o fa-2x"></i>
+					</a>
 				</li> -->
+				
 				
 				<li class="list-group-item">
 					<button class="btn btn-primary" type="button" ng-click="saveForm()">Save</button>
@@ -127,11 +134,11 @@
 				</li>
 			</ul>	
 		</div>
-		<div class="col-lg-5">
+		<div class="col-lg-5" ng-if="formElements.length > 0">
 			<div class="row" style="background-color: #{{form.backgroundColor}}">
 				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
 
-					<!-- <h1 class="page-header">{{form.title}}</h1> -->
+					<h1 class="page-header text-center" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h1>
 					<div class="form-group" ng-repeat="input in preview">
 						<custom-input input="input"></custom-input>
 					</div>  
@@ -140,7 +147,7 @@
 				</div>
 				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
 
-					<!-- <h3 class="text-center page-header">{{form.title}}</h3> -->
+					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
 					<div class="row" ng-repeat="row in preview">
 						<div class="col-lg-12" ng-if="isObject(row)">
 							<custom-input input="row"></custom-input>
@@ -189,7 +196,7 @@
 	        <div class="row" style="background-color: #{{form.backgroundColor}}">
 				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
 
-					<!-- <h1 class="page-header">{{form.title}}</h1> -->
+					<h1 class="page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h1>
 					<div class="form-group" ng-repeat="input in preview">
 						<custom-input input="input"></custom-input>
 					</div>  
@@ -198,7 +205,7 @@
 				</div>
 				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
 
-					<!-- <h3 class="text-center page-header">{{form.title}}</h3> -->
+					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
 					<div class="row" ng-repeat="row in preview">
 						<div class="col-lg-12" ng-if="isObject(row)">
 							<custom-input input="row"></custom-input>

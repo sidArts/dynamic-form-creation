@@ -6,6 +6,7 @@ angular.module('app', [])
 		$scope.isObject = angular.isObject;
 
 		$scope.form = {};
+		$scope.form.title = "Form Title";
 		$scope.form.backgroundColor = 'fff';
 		$scope.form.viewMode = 'Single Column View';
 		$scope.formElements = [];
@@ -24,6 +25,7 @@ angular.module('app', [])
         	 	console.log(res.data);
         	 	$scope.form._id = res.data._id;
                 $scope.form.viewMode = res.data.viewMode;
+                $scope.form.title = res.data.title;
                 $scope.form.backgroundColor = res.data.backgroundColor;
                 $scope.formElements  = res.data.inputs;
                 $scope.sortFormElements();
@@ -99,7 +101,9 @@ angular.module('app', [])
 			"size": "1"
 		};
 
-		
+		/*$scope.empty = {
+			"type": "empty"
+		}*/
 		
 
 		$scope.createElement = function(elementType) {
@@ -241,7 +245,7 @@ angular.module('app', [])
 		};
 
 		$scope.goto = function(page){
-			document.navigation.action = '/api/'+page;
+			document.navigation.action = '/'+page;
 			document.navigation.submit();
 		};
 

@@ -2,11 +2,11 @@
 <html ng-app="app">
 <head>
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
-	<script type="text/javascript" src="/jquery.js"></script>
-	<script type="text/javascript" src="/bootstrap.js"></script>
-	<script type="text/javascript" src="/angular.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/css/lib/font-awesome.css">
+	<script type="text/javascript" src="/js/lib/jquery.js"></script>
+	<script type="text/javascript" src="/js/lib/bootstrap.js"></script>
+	<script type="text/javascript" src="/js/lib/angular.js"></script>
 </head>
 <body ng-controller="appController">
 <form name="navigation" method="post">	
@@ -87,7 +87,7 @@
 	        <div class="row" style="background-color: #{{form.backgroundColor}}">
 				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
 
-					<!-- <h1 class="page-header">{{form.title}}</h1> -->
+					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
 					<div class="form-group" ng-repeat="input in preview">
 						<custom-input input="input"></custom-input>
 					</div>  
@@ -96,7 +96,7 @@
 				</div>
 				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
 
-					<!-- <h3 class="text-center page-header">{{form.title}}</h3> -->
+					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
 					<div class="row" ng-repeat="row in preview">
 						<div class="col-lg-12" ng-if="isObject(row)">
 							<custom-input input="row"></custom-input>
@@ -133,7 +133,7 @@
 			document.navigation.submit();
 		};
 		$scope.editForm = function(id){
-			document.navigation.action = '/api/createTemplate';
+			document.navigation.action = '/createTemplate';
 			$(document.navigation).append($('<input>', { type: 'hidden', id: 'formId', name: 'formId', value: id }));
 			document.navigation.submit();
 		};
