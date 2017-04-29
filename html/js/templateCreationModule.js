@@ -115,6 +115,8 @@ angular.module('app', [])
 			$scope.sortFormElements();
 
 			console.log($scope.preview);
+
+			console.log(document.getElementsByClassName("element-li"));
 				
 		};
 
@@ -247,6 +249,10 @@ angular.module('app', [])
 		$scope.goto = function(page){
 			document.navigation.action = '/'+page;
 			document.navigation.submit();
+		};
+
+		$scope.showToolBox = function(event) {
+			$(event.target).children().eq(0).css("display", "full");
 		};
 
 	});
