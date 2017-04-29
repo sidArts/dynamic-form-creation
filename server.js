@@ -5,7 +5,6 @@ var favicon  	  = require('serve-favicon');
 var ejs         = require('ejs');
 var mongoose 	  = require('mongoose');
 var bodyParser 	= require('body-parser');
-var jwt    		  = require('jsonwebtoken');
 var fs 			    = require('fs');
 
 var app = express();
@@ -46,8 +45,6 @@ app.use("/", rootContextRouter);
 var apiRoutes = require("./routes/apiRoutes");
 
 app.use('/api', apiRoutes);
-
-// app.use("/api/template", templateRoutes);
 
 http.createServer(app).listen(app.get('port'), function(){
 
