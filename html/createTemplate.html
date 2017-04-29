@@ -10,468 +10,235 @@
 	<script type="text/javascript" src="/js/lib/jscolor.js"></script>
 </head>
 <body ng-controller="appController">
-<form name="navigation" method="post">	
-	<input type="hidden" name="token" value="<%=  token %>">
-</form>
-<nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-    <ul class="nav navbar-nav">
-
-    	<li class="active">
-    		<a href="#" ng-click="goto('createTemplate')">Create Template</a>
-		</li>
-		<li>
-			<a href="#" ng-click="goto('myTemplates')">My Templates</a>
-		</li>
-      
-    </ul>
-
-    <ul class="nav navbar-nav navbar-right">
-		<li><a href="#"><span class="fa fa-user"></span> Hello, </a></li>
-		<li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
-  	</ul>
-
-  </div>
-</nav>
-<div style="width: 97%; margin: auto;">
+<div class="container" style="width: 99%;">
+	
 	<div class="row">
 		<div class="col-lg-3">
-			<ul class="list-group">
-				<li class="list-group-item">
-					<label>View Mode &nbsp;</label>
-					<select class="form-control" ng-model="form.viewMode" ng-change="sortFormElements()">
-						<option value="Single Column View">Single Column View</option>
-						<option value="Double Column View">Double Column View</option>
-					</select>
-				</li>
-				<li class="list-group-item">
-					<label>Title &nbsp;</label>
-					<input type="text" class="form-control" ng-model="form.title">
-				</li>
-				<li class="list-group-item">
-					<span>Background &nbsp;</span>
-					<span>
-						<input type="text" class="jscolor" id="jscolor" ng-model="form.backgroundColor">
-					</span>
-				</li>
-
-				<li class="list-group-item">
-					Text Input &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(textInput);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li>
-				<li class="list-group-item">
-					Text Area &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(textareaInput);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li>
-				<li class="list-group-item">
-					Select Input &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(selectInput);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li>
-				<li class="list-group-item">
-					Checkbox Input &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(checkboxInput);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li>
-				<li class="list-group-item">
-					Radio Group &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(radioGroup);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li>
-				<li class="list-group-item">
-					Heading &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(heading);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li>
-				<!-- <li class="list-group-item">
-					Empty &nbsp; 
-					<a href="javascript: void(0)" ng-click="createElement(empty);">
-						<i class="fa fa-pencil-square-o fa-2x"></i>
-					</a>
-				</li> -->
-				
-				
-				<li class="list-group-item">
-					<button class="btn btn-primary" type="button" ng-click="saveForm()">Save</button>
-					&nbsp;&nbsp;
-					<button class="btn btn-primary" type="button" ng-click="viewJson()">JSON</button>
-					&nbsp;&nbsp;
-					<button class="btn btn-primary" type="button" ng-disabled="formElements.length == 0" data-target="#formPreview" data-toggle="modal">Preview</button>
-				</li>
-			</ul>
-		</div>
-		
-		<div class="col-lg-4">
-			<ul class="list-group sortable" id="formItems">
-				<li class="list-group-item well well-sm" ng-repeat="input in formElements">
-					<div class="text-right">
-						<button class="btn btn-default btn-xs" ng-disabled="formElements.length == 1 || $index == 0" ng-click="moveUp($index)">
-							<i class="fa fa-arrow-up" aria-hidden="true"></i>
-						</button>&nbsp;&nbsp;
-						<button class="btn btn-default btn-xs" ng-disabled="formElements.length == 1 || $index == (formElements.length - 1)" ng-click="moveDown($index)">
-							<i class="fa fa-arrow-down" aria-hidden="true"></i>
-						</button>&nbsp;&nbsp;
-						<button href="#" class="btn btn-primary btn-xs" ng-click="editInput(input, $index)">
-							<i class="fa fa-pencil"></i>
-						</button>&nbsp;&nbsp;
-						<button class="btn btn-warning btn-xs" ng-click="removeFormElement($index)">
-							<i class="fa fa-remove"></i>
-						</button>	
-					</div>
-					
-					<custom-input input="input"></custom-input>
-				</li>
-			</ul>	
-		</div>
-		<div class="col-lg-5" ng-if="formElements.length > 0">
-			<div class="row" style="background-color: #{{form.backgroundColor}}">
-				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
-
-					<h2 class="page-header text-center" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h2>
-					<div class="form-group" ng-repeat="input in preview">
-						<custom-input input="input"></custom-input>
-					</div>  
-					
-					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
-				</div>
-				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
-
-					<h2 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h2>
-					<div class="row" ng-repeat="row in preview">
-						<div class="col-lg-12" ng-if="isObject(row)">
-							<custom-input input="row"></custom-input>
-						</div>
-						<div class="col-lg-6" ng-if="isArray(row) && input != undefined" ng-repeat="input in row">
-							<div class="form-group" >
-								<custom-input input="input"></custom-input>
-							</div>  
-						</div>
-					</div>
-					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="jsonView" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Form Elements JSON</h4>
-      </div>
-      <div class="modal-body" id="jsonViewModalBody">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-<div id="formPreview" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <!-- Modal content-->
-    <div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">Preview</h4>
-		</div>
-		<div class="modal-body">
-			<div style="width: 95%; margin: auto;">
-	        <div class="row" style="background-color: #{{form.backgroundColor}}">
-				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
-
-					<h1 class="page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h1>
-					<div class="form-group" ng-repeat="input in preview">
-						<custom-input input="input"></custom-input>
-					</div>  
-					
-					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
-				</div>
-				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
-
-					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
-					<div class="row" ng-repeat="row in preview">
-						<div class="col-lg-12" ng-if="isObject(row)">
-							<custom-input input="row"></custom-input>
-						</div>
-						<div class="col-lg-6" ng-if="isArray(row) && input != undefined" ng-repeat="input in row">
-							<div class="form-group" >
-								<custom-input input="input"></custom-input>
-							</div>  
-						</div>
-					</div>
-					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
-				</div>
-			</div>
-			</div>
-	  	</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		</div>
-    </div>
-  </div>
-</div>
-
-<!-- START Edit Input Modal -->
-<div id="editInputPropertiesModal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-sm">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" ng-if="editInputModel.type == 'text'">
-					Text Input Properties
-				</h4>
-				<h4 class="modal-title" ng-if="editInputModel.type == 'textarea'">
-					Textarea Input Properties
-				</h4>
-				<h4 class="modal-title" ng-if="editInputModel.type == 'select'">
-					Select Input Properties
-				</h4>
-				<h4 class="modal-title" ng-if="editInputModel.type == 'checkbox'">
-					Checkbox Input Properties
-				</h4>
-				<h4 class="modal-title" ng-if="editInputModel.type == 'radio'">
-					Radio Button Input Properties
-				</h4>
-				<h4 class="modal-title" ng-if="editInputModel.type == 'heading'">
-					Heading Properties
-				</h4>
-			</div>
-			<div class="modal-body">
-				<!-- START Edit Input Properties Section -->
-				<div ng-if="editInputModel.type == 'text'">
-					<div class="form-group">
-						<label>Label</label>
-						<input type="text" class="form-control" ng-model="editInputModel.label">
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			  <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingOne">
+			      <h4 class="panel-title">
+			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+			          Template Settings
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+			      <div class="panel-body">
+			        <div class="form-group">
+						<label>Add Title</label>
+						<input type="text" class="form-control" ng-model="template.title.text">
 					</div>
 					<div class="form-group">
-						<label>Placeholder</label>
-						<input type="text" class="form-control" ng-model="editInputModel.placeholder">
-					</div>
-					<div class="form-group">
-						<label>Default Value</label>
-						<input type="text" class="form-control" ng-model="editInputModel.value">
-					</div>
-					<div class="row">
-						<div class="col-lg-12 text-center">
-							<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
-								Save
-							</button>		
-						</div>
-					</div>		
-				</div>
-				<div ng-if="editInputModel.type == 'textarea'">
-					<div class="form-group">
-						<label>Label</label>
-						<input type="text" class="form-control" ng-model="editInputModel.label">
-					</div>
-					<div class="form-group">
-						<label>Placeholder</label>
-						<input type="text" class="form-control" ng-model="editInputModel.placeholder">
-					</div>
-					<div class="form-group">
-						<label>Default Value</label>
-						<input type="text" class="form-control" ng-model="editInputModel.value">
-					</div>
-					<div class="row">
-						<div class="col-lg-12 text-center">
-							<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
-								Save
-							</button>		
-						</div>
-					</div>	
-				</div>
-				<div ng-if="editInputModel.type == 'select'">
-					<div class="form-group">
-						<label>Label</label>
-						<input type="text" class="form-control" ng-model="editInputModel.label">
-					</div>
-					<div class="form-group">
-						<label>Default Value</label>
-						<select class="form-control" ng-model="editInputModel.value">
-							<option value="">--select--</option>
-							<option ng-repeat="option in editInputModel.optionValues" value="{{option.value}}">{{option.text}}</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label>
-							<span>
-								Option Values &nbsp; 
-								<button class="btn btn-primary btn-xs" ng-click="addSelectInputOption()">
-									<i class="fa fa-plus"></i>
-								</button>
-							</span>
+						<label class="radio-inline">
+							<input type="radio" ng-model="template.title.align" value="left" name="align">Left
 						</label>
-						<div class="row">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>Value</th>
-										<th>Text</th>
-										<td></td>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="opt in editInputModel.optionValues">
-										<td>
-											<input type="text" ng-model="opt.value" class="form-control">
-										</td>
-										<td>
-											<input type="text" ng-model="opt.text" class="form-control">			
-										</td>
-										<td>
-											<button class="btn btn-danger btn-xs" ng-click="removeSelectOption($index)">
-												<i class="fa fa-remove"></i>
-											</button>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+						<label class="radio-inline">
+							<input type="radio" ng-model="template.title.align" value="center" name="align">Center
+						</label>
+						<label class="radio-inline">
+							<input type="radio" ng-model="template.title.align" value="right" name="align">Right
+						</label>
 					</div>
-					<div class="row">
-						<div class="col-lg-12 text-center">
-							<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
-								Save
-							</button>		
-						</div>
+					<div class="form-group">
+						<label>Background Color</label>
+						<input type="text" class="jscolor {hash:true}" id="jscolor" ng-model="template.backgroundColor">
+					</div>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingTwo">
+			      <h4 class="panel-title">
+			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+			          Create Section
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+			      <div class="panel-body">
+			      	<div class="form-group">
+			      		<label>Section Name</label>
+			      		<input type="text" ng-model="section.name" class="form-control">
+			      	</div>
+			        <div class="form-group">
+						<label>Select View Mode</label>
+						<select class="form-control" ng-model="section.viewMode">
+							<option value="">-- Select View Mode --</option>
+							<option value="100">Single Column View</option>
+							<option value="101">Double Column View</option>
+							<option value="103">Double Column View</option>
+						</select>			
 					</div>	
-				</div>
+					<div class="form-group">
+						<label>Add Heading</label>
+						<input type="text" ng-model="section.heading.text" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Background Color</label>
+						<input type="text" class="jscolor {hash:true}" id="jscolor" ng-model="section.backgroundColor">
+					</div>
+					<div class="form-group">
+						<label class="radio-inline"><input type="radio" ng-model="section.heading.align" value="left">Left</label>
+						<label class="radio-inline"><input type="radio" ng-model="section.heading.align" value="center">Center</label>
+						<label class="radio-inline"><input type="radio" ng-model="section.heading.align" value="right">Right</label>
+					</div>
+					<button class="btn btn-primary btn-sm" ng-click="addSection()">Add Section</button>	
+			      </div>
+			    </div>
+			  </div>
+			  <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingThree">
+			      <h4 class="panel-title">
+			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+			          Add Inputs
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+			      <div class="panel-body">
+			      	<div class="text-center" ng-if="template.sections.length == 0">
+		      			No Sections added yet..
+		      		</div>
+			        <div class="form-group" ng-if="template.sections.length > 0">
+			        	<label>Select Section</label>
+		      			<select class="form-control" ng-model="model.selectedSection">
+		      				<option ng-repeat="option in template.sections" value="{{$index}}">{{option.name}}</option>
+		      			</select>
+			        </div>
+			        <ul class="list-group" ng-if="model.selectedSection != undefined">
+						<li class="list-group-item">
+							Text Input &nbsp; 
+							<a href="javascript: void(0)" ng-click="createElement(textInput);">
+								<i class="fa fa-pencil-square-o fa-lg"></i>
+							</a>
+						</li>
+						<li class="list-group-item">
+							Text Area &nbsp; 
+							<a href="javascript: void(0)" ng-click="createElement(textareaInput);">
+								<i class="fa fa-pencil-square-o fa-lg"></i>
+							</a>
+						</li>
+						<li class="list-group-item">
+							Select Input &nbsp; 
+							<a href="javascript: void(0)" ng-click="createElement(selectInput);">
+								<i class="fa fa-list-ol fa-lg"></i>
+							</a>
+						</li>
+						<li class="list-group-item">
+							Checkbox Input &nbsp; 
+							<a href="javascript: void(0)" ng-click="createElement(checkboxInput);">
+								<i class="fa fa-check-square fa-lg" aria-hidden="true"></i>
 
-				<div ng-if="editInputModel.type == 'checkbox'">
-					<div class="form-group">
-						<label>Label</label>
-						<input type="text" class="form-control" ng-model="editInputModel.label">
-					</div>
-					<div class="form-group">
-						<table class="table table-striped">
-							<tbody>
-								<tr>
-									<th>Checked Value</th>
-									<td>
-										<input type="text" class="form-control" ng-model="editInputModel.checkedValue">
-									</td>
-								</tr>
-								<tr>
-									<th>Unchecked Value</th>
-									<td>
-										<input type="text" class="form-control" ng-model="editInputModel.uncheckedValue">
-									</td>
-								</tr>
-							</tbody>
-						</table>			
-					</div>
-					<div class="row">
-						<div class="col-lg-12 text-center">
-							<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
-								Save
-							</button>		
-						</div>
-					</div>	
-				</div>
+							</a>
+						</li>
+						<li class="list-group-item">
+							Radio Group &nbsp; 
+							<a href="javascript: void(0)" ng-click="createElement(radioGroup);">
+								<i class="fa fa-circle-o fa-lg"></i>
+							</a>
+						</li>
+					</ul>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
 
-				<div ng-if="editInputModel.type == 'radio'">
-					<div class="form-group">
-						<label>Label</label>
-						<input type="text" class="form-control" ng-model="editInputModel.label">
+		<!-- ############################### -->
+		<!-- ######## START Preview ######## -->
+		<div class="col-lg-6" style="background-color: {{template.backgroundColor}};">
+			<h1 ng-if="template.title.text != undefined && template.title.text != ''" class="page-header text-{{template.title.align}}">{{template.title.text}}</h1>
+			<div class="row" ng-repeat="section in template.sections" style="background-color: {{section.backgroundColor}}; margin: 8px; padding: 8px;">
+				<div class="col-lg-12">
+					<h3 class="page-header text-{{section.heading.align}}" ng-if="section.heading.text != '' && section.heading.text != undefined">
+						{{section.heading.text}}
+					</h3>
+					<div class="form-group" ng-repeat="input in section.formElements">
+						<custom-input input="input"></custom-input>
 					</div>
-					<div class="form-group">
-						<table class="table table-hover table-striped">
-							<thead>
-								<tr>
-									<th>Value</th>
-									<th>Label</th>
-									<th>
-										<button class="btn btn-primary btn-xs" ng-click="addRadioInputOption()">
-											<i class="fa fa-plus"></i>
-										</button>
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="value in editInputModel.values">
-									<td>
-										<input type="text" ng-model="value.value" class="form-control">
-									</td>
-									<td>
-										<input type="text" ng-model="value.label" class="form-control">
-									</td>
-									<td>
-										<button class="btn btn-danger btn-xs" ng-click="removeRadioOption($index)">
-											<i class="fa fa-remove"></i>
-										</button>
-									</td>
-								</tr>
-							</tbody>				
-						</table>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 text-center">
-							<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
-								Save
-							</button>		
-						</div>
-					</div>		
-				</div>
-
-				<div ng-if="editInputModel.type == 'heading'">
-					<div class="form-group">
-						<label>Text</label>
-						<input type="text" class="form-control" ng-model="editInputModel.text">
-					</div>
-					<div class="form-group">
-						<label>Align</label>						
-						<select class="form-control" ng-model="editInputModel.align">
-							<option ng-repeat="value in ['center', 'left', 'right']">{{value}}</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Size</label>						
-						<select class="form-control" ng-model="editInputModel.size">
-							<option ng-repeat="value in ['1','2','3','4']">{{value}}</option>
-						</select>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 text-center">
-							<button class="btn btn-primary btn-sm btn-block" ng-click="saveInputProperties()">
-								Save
-							</button>		
-						</div>
-					</div>		
 				</div>
 			</div>
 		</div>
-		<!-- Modal content-->
+		<!-- ######## END Preview ######## -->
+		<!-- ############################# -->
+			
+		<div class="col-lg-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">Edit Section</h4>
+				</div>
+		      	<div class="panel-body">
+		      		<div class="panel-group" id="editSectionAccordion" role="tablist" aria-multiselectable="true">
+			      		<div class="panel panel-default" ng-repeat="section in template.sections">
+			      			<div class="panel-heading">
+			      				<a role="button" data-toggle="collapse" data-parent="#editSectionAccordion" href="#section_{{$index}}" aria-expanded="true" aria-controls="collapseOne">
+		      						{{section.name}}
+			        			</a>			      				
+			      			</div>
+			      			<div id="section_{{$index}}" class="panel-collapse collapse">
+				      			<div class="panel-body">
+				      				<div class="form-group">
+										<label>Select View Mode</label>
+										<select class="form-control" ng-model="section.viewMode">
+											<option value="">-- Select View Mode --</option>
+											<option value="100">Single Column View</option>
+											<option value="101">Double Column View</option>
+											<option value="103">Double Column View</option>
+										</select>			
+									</div>
+									<div class="form-group">
+										<label>Heading</label>
+										<input type="text" ng-model="section.heading.text" class="form-control">
+									</div>
+									<div class="form-group">
+										<label class="radio-inline"><input type="radio" ng-model="section.heading.align" value="left">Left</label>
+										<label class="radio-inline"><input type="radio" ng-model="section.heading.align" value="center">Center</label>
+										<label class="radio-inline"><input type="radio" ng-model="section.heading.align" value="right">Right</label>
+									</div>
+									<div class="form-group">
+										<label>Background Color</label>
+										<input type="text" class="jscolor {hash:true}" id="jscolor" ng-model="section.backgroundColor">
+									</div>
+
+									<div ng-repeat="input in section.formElements">
+										<div class="pull-right">
+											<button class="btn btn-default btn-xs" ng-disabled="template.sections[selectedSection].formElements.length == 1 || $index == 0" ng-click="moveUp($index)">
+												<i class="fa fa-arrow-up" aria-hidden="true"></i>
+											</button>&nbsp;&nbsp;
+											<button class="btn btn-default btn-xs" ng-disabled="template.sections[selectedSection].formElements.length == 1 || $index == (formElements.length - 1)" ng-click="moveDown($index)">
+												<i class="fa fa-arrow-down" aria-hidden="true"></i>
+											</button>&nbsp;&nbsp;
+											<button class="btn btn-primary btn-xs" ng-click="editInput(input, $index)">
+												<i class="fa fa-pencil"></i>
+											</button>&nbsp;&nbsp;
+											<button class="btn btn-warning btn-xs" ng-click="removeFormElement($index)">
+												<i class="fa fa-remove"></i>
+											</button>	
+										</div>
+										<custom-input input="input"></custom-input>
+									</div>
+				      			</div>
+			      			</div>
+		      			</div>
+		      		</div>
+		      		<div class="text-center" ng-if="template.sections.length == 0">
+		      			No Sections added yet..
+		      		</div>
+		      		<div class="text-center" ng-if="template.sections[model.selectedSection].formElements.length == 0">
+		      			No Inputs added yet..
+		      		</div>		      		
+		      	</div>
+	      	</div>			
+		</div>
+	</div>
+
+	<div class="row">
+		
 	</div>
 </div>
-<!-- START Edit Input Modal -->
-</div>
-<script type="text/javascript">
-	var formId = '<%= formId %>';
-</script>
-<script type="text/javascript" src="/js/templateCreationModule.js"></script>
+
+<script type="text/javascript" src="/js/formCreatorModule.js"></script>
 <script type="text/javascript" src="/js/directives.js"></script>
 </body>
 </html>
-
-
-
-
-
