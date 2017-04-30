@@ -125,6 +125,17 @@ angular.module('app')
 
 	}
 	
+})
+.directive("editInput", function($compile) {
+	return {
+		restrict: "E",
+		scope: {
+			input: "="
+		},
+		link: function($scope, element, attrs) {
+
+		}
+	};
 });
 
 

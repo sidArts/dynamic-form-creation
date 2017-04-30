@@ -43,8 +43,8 @@
 					<tr>
 						<th>#</th>
 						<th>Title</th>
-						<th>View Type</th>
-						<th>Field Count</th>
+						<th>Sections</th>
+						<!-- <th>Field Count</th> -->
 						<!-- <th>ID</th> -->
 						<th>Action</th>
 					</tr>
@@ -52,9 +52,9 @@
 				<tbody>
 					<tr ng-repeat="form in forms">
 						<td>{{$index + 1}}</td>
-						<td>{{form.title}}</td>
-						<td>{{form.viewMode}}</td>
-						<td>{{form.inputs.length}}</td>
+						<td>{{form.title.text}}</td>
+						<td>{{form.sections.length}}</td>
+						<!-- <td>{{form.inputs.length}}</td> -->
 						<!-- <td>{{form._id}}</td> -->
 						<td>
 							<button class="btn btn-default btn-xs" ng-click="previewForm($index)">
@@ -83,34 +83,53 @@
 			<h4 class="modal-title">Preview</h4>
 		</div>
 		<div class="modal-body">
-			<div style="width: 95%; margin: auto;">
-	        <div class="row" style="background-color: #{{form.backgroundColor}}">
-				<div class="col-lg-12" ng-if="form.viewMode == 'Single Column View'" style="padding: 10px;">
-
-					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
-					<div class="form-group" ng-repeat="input in preview">
-						<custom-input input="input"></custom-input>
-					</div>  
+			
+	        	<!-- ############################### -->
+				<!-- ######## START Preview ######## -->
+				<div style="width: 90%; margin: auto;" style="background-color: {{template.backgroundColor}};">
 					
-					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
-				</div>
-				<div class="col-lg-12" ng-if="form.viewMode == 'Double Column View'" style="padding: 10px;">
+					<h1 ng-if="preview.title.text != undefined && preview.title.text != ''" class="page-header text-{{preview.title.align}}">{{preview.title.text}}</h1>
+					<div class="row" ng-repeat="section in preview.sections" style="background-color: {{section.backgroundColor}}; margin: 8px; padding: 8px;">
+						<div class="col-lg-12">
+							<h3 class="page-header text-{{section.heading.align}}" ng-if="section.heading.text != '' && section.heading.text != undefined">
+								{{section.heading.text}}
+							</h3>
+							<div class="form-group" ng-repeat="input in section.formElements" ng-if="section.viewMode == '101'">
+								<custom-input input="input"></custom-input>					
+							</div>
 
-					<h3 class="text-center page-header" ng-if="form.title != undefined && form.title != ''">{{form.title}}</h3>
-					<div class="row" ng-repeat="row in preview">
-						<div class="col-lg-12" ng-if="isObject(row)">
-							<custom-input input="row"></custom-input>
-						</div>
-						<div class="col-lg-6" ng-if="isArray(row) && input != undefined" ng-repeat="input in row">
-							<div class="form-group" >
-								<custom-input input="input"></custom-input>
-							</div>  
+							
+							<div class="row" ng-repeat="inputArr in section.formElements" ng-if="section.viewMode == '102'">
+								<div class="col-lg-6" ng-repeat="input in inputArr">
+									<div class="form-group">
+										<custom-input input="input"></custom-input>
+									</div>		
+								</div>
+							</div>
+
+							<div class="row" ng-repeat="inputArr in section.formElements" ng-if="section.viewMode == '103'">
+								<div class="col-lg-4" ng-repeat="input in inputArr">
+									<div class="form-group">
+										<custom-input input="input"></custom-input>
+									</div>		
+								</div>
+							</div>
+
+							<div class="row" ng-repeat="inputArr in section.formElements" ng-if="section.viewMode == '104'">
+								<div class="col-lg-3" ng-repeat="input in inputArr">
+									<div class="form-group">
+										<custom-input input="input"></custom-input>
+									</div>		
+								</div>
+							</div>
+
 						</div>
 					</div>
-					<button class="btn btn-primary" ng-if="formElements.length !== 0">Submit</button>   
+					
 				</div>
-			</div>
-			</div>
+				<!-- ######## END Preview ######## -->
+				<!-- ############################# -->
+			
 	  	</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -128,6 +147,9 @@
 		$scope.isObject = angular.isObject;
 		
 		$scope.forms = [];
+
+		$scope.preview = {};
+
 		$scope.goto = function(page){
 			document.navigation.action = page;
 			document.navigation.submit();
@@ -167,40 +189,41 @@
         	});
     	};
 
-    	var sortFormElements = function(form) {
-			$scope.preview = [];
-			if(form.viewMode == 'Double Column View') {
-				var counter = 0;
-				var length = form.inputs.length/2;
-				for(var i = 0; i < length; i++) {
-					$scope.preview[i] = [];
-					for(var j = 0; j < 2; j++) {
-						if(form.inputs[ counter ] != undefined) {
-							if( form.inputs[ counter ].type == 'heading' ) {
-								if($scope.preview[i].length == 0) {									
-									$scope.preview[i] = angular.copy(form.inputs[ counter++ ]);
-									length++;
-								} else if($scope.preview[i].length == 1) {
-									$scope.preview[i].push(undefined);
-									length++;
-								}								
-								break;	
-							} else {
-								$scope.preview[ i ].push(angular.copy(form.inputs[ counter++ ]));	
-							}
-						}
-
-							
-					}
+    	var convertArr = function(formElementArr, n) {
+			var counter = 0;
+			var length = formElementArr.length/n;
+			var newArr = [];
+			for(var i = 0; i < length; i++) {
+				newArr[i] = [];
+				for(var j = 0; j < n; j++) {
+					if(formElementArr[ counter ] != undefined) {
+						newArr[i].push(formElementArr[counter++]);
+					}						
 				}
-			} else {
-				$scope.preview = angular.copy(form.inputs);
 			}
+			console.log('Modified array',newArr);
+			return newArr;
+		};
+
+    	var changeDisplayLayout = function() {
+			// $scope.preview = angular.copy($scope.template);
+			
+
+			angular.forEach($scope.preview.sections, function(section, index){
+				if(section.viewMode == '102') {
+					section.formElements = convertArr(angular.copy(section.formElements), 2);
+				} else if(section.viewMode == '103') {
+					section.formElements = convertArr(angular.copy(section.formElements), 3);
+				} else if(section.viewMode == '104') {
+					section.formElements = convertArr(angular.copy(section.formElements), 4);
+				} 
+
+			});
 		};
 
     	$scope.previewForm = function(formIndex) {
-    		$scope.form = angular.copy($scope.forms[formIndex])
-    		sortFormElements(angular.copy($scope.forms[formIndex]));
+    		$scope.preview = angular.copy($scope.forms[formIndex]);
+    		changeDisplayLayout();
     		$('#formPreview').modal('show');
 
     		console.log($scope.preview);
