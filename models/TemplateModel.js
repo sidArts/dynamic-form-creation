@@ -24,6 +24,13 @@ var templateSchema = new Schema({
 								"backgroundColor": String,
 								"formElements": { "type" : Array , "default" : [] }
 							}],
+							"button": {
+								"text": String,
+								"size": String,
+								"block": { "type": Boolean, "default": false },
+								"fontColor": String,
+								"color": String
+							},
 							"createdBy": Schema.ObjectId,
 							"createdAt": Date,
 						    "updatedAt": { type: Date, default: Date.now },

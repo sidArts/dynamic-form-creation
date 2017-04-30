@@ -34,18 +34,60 @@
 					</div>
 					<div class="form-group">
 						<label class="radio-inline">
-							<input type="radio" ng-model="template.title.align" value="left" name="align">Left
+							<input type="radio" ng-model="template.title.align" value="left">Left
 						</label>
 						<label class="radio-inline">
-							<input type="radio" ng-model="template.title.align" value="center" name="align">Center
+							<input type="radio" ng-model="template.title.align" value="center">Center
 						</label>
 						<label class="radio-inline">
-							<input type="radio" ng-model="template.title.align" value="right" name="align">Right
+							<input type="radio" ng-model="template.title.align" value="right">Right
 						</label>
 					</div>
 					<div class="form-group">
 						<label>Background Color</label>
-						<input type="text" class="jscolor {hash:true}" id="jscolor" ng-model="template.backgroundColor">
+						<input type="text" style="background-color: {{template.backgroundColor}};" class="jscolor {hash:true} form-control" id="jscolor" ng-model="template.backgroundColor">
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h5 class="panel-title">
+								Button Properties
+							</h5>
+						</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label>Text</label>
+								<input type="text" ng-model="template.button.text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>Size</label>
+								<div class="form-group">
+									<label class="radio-inline">
+										<input type="radio" ng-model="template.button.size" value="btn-lg" name="align">Large
+									</label>
+									<label class="radio-inline">
+										<input type="radio" ng-model="template.button.size" value="" name="align">Default
+									</label>
+									<label class="radio-inline">
+										<input type="radio" ng-model="template.button.size" value="btn-sm" name="align">Small
+									</label>
+								</div>
+							</div>
+							<div class="checkbox">
+							  	<label><input type="checkbox" ng-model="template.button.block" ng-true-value="true" ng-false-value="false">Block Button</label>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-lg-6">
+										<label>Color</label>
+										<input type="text" ng-model="template.button.color" class="jscolor {hash:true} form-control">
+									</div>
+									<div class="col-lg-6">
+										<label>Font Color</label>
+										<input type="text" ng-model="template.button.fontColor" class="jscolor {hash:true} form-control">
+									</div>
+								</div>							
+							</div>
+						</div>
 					</div>
 			      </div>
 			    </div>
@@ -85,7 +127,7 @@
 					</div>
 					<div class="form-group">
 						<label>Background Color</label>
-						<input type="text" class="jscolor {hash:true}" id="jscolor" ng-model="section.backgroundColor">
+						<input type="text" class="jscolor {hash:true}" ng-model="section.backgroundColor">
 					</div>
 					
 					<button class="btn btn-primary btn-sm" ng-click="addSection()">Add Section</button>	
@@ -148,11 +190,14 @@
 			    </div>
 			  </div>
 			</div>
+			<button ng-if="template.sections.length > 0 && template.sections[0].formElements.length > 0" ng-disabled="template.sections.length == 0 || (template.sections.length > 0 && template.sections[0].formElements.length == 0)" class="btn btn-primary btn-circle" ng-click="saveForm()">
+				<i class="fa fa-floppy-o"></i>&nbsp; Save Form
+			</button>
 		</div>
 
 		<!-- ############################### -->
 		<!-- ######## START Preview ######## -->
-		<div class="col-lg-6" style="background-color: {{template.backgroundColor}};">
+		<div class="col-lg-6" style="background-color: {{template.backgroundColor}}">
 			<h1 ng-if="template.title.text != undefined && template.title.text != ''" class="page-header text-{{template.title.align}}">{{template.title.text}}</h1>
 			<div class="row" ng-repeat="section in preview.sections" style="background-color: {{section.backgroundColor}}; margin: 8px; padding: 8px;">
 				<div class="col-lg-12">
@@ -189,6 +234,9 @@
 					</div>
 
 				</div>
+			</div>
+			<div class="row text-center" style="margin: 8px; padding: 8px;">
+				<button style="background-color: {{template.button.color}}; color: {{template.button.fontColor}};" class="btn btn-default {{template.button.size}} {{template.button.block ? 'btn-block' : ''}}">{{template.button.text}}</button>	
 			</div>
 			
 		</div>
@@ -232,7 +280,7 @@
 									</div>
 									<div class="form-group">
 										<label>Background Color</label>
-										<input type="text" class="jscolor {hash:true}" id="jscolor" ng-model="preview.sections[$index].backgroundColor">
+										<input type="text" class="jscolor {hash:true}" ng-model="preview.sections[$index].backgroundColor">
 									</div>
 
 									<div ng-repeat="input in section.formElements">
@@ -269,9 +317,7 @@
 
 	<div class="row">
 		<div class="col-lg-4 col-lg-offset-3">
-			<button ng-if="template.sections.length > 0 && template.sections[0].formElements.length > 0" ng-disabled="template.sections.length == 0 || (template.sections.length > 0 && template.sections[0].formElements.length == 0)" class="btn btn-primary btn-circle" ng-click="saveForm()">
-				<i class="fa fa-floppy-o"></i>
-			</button>
+			
 		</div>
 	</div>
 

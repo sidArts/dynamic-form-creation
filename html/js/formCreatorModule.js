@@ -9,6 +9,14 @@
 		
 		$scope.template.title = {};
 		$scope.template.title.align = 'center';
+		$scope.template.backgroundColor = '#FFFFFF';
+		$scope.template.button = {
+			"text": "Submit",
+			"size": "",
+			"block": false,
+			"fontColor": "",
+			"color": ""
+		};
 
 		$scope.template.sections = [];
 
@@ -75,10 +83,11 @@
         	 	console.log(res.data);
         	 	$scope.template = res.data;
         	 	changeDisplayLayout();
-                console.log($('#jscolor'));
-                $('#jscolor').trigger('change');
+        	 	// $('.jscolor').trigger("change");
         	}, function(err){
         	 	console.log(err);
+        	 	if(err.status === 401)
+        	 		$window.location.href = "http://" + $window.location.host + "/";
         	});
 		};
 
@@ -208,7 +217,7 @@
 		var changeDisplayLayout = function() {
 			$scope.preview = angular.copy($scope.template);
 			
-
+			console.log('Preview Object ::: ', $scope.preview);
 			angular.forEach($scope.preview.sections, function(section, index){
 				if(section.viewMode == '102') {
 					section.formElements = convertArr(angular.copy(section.formElements), 2);

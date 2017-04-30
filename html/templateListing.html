@@ -86,7 +86,7 @@
 			
 	        	<!-- ############################### -->
 				<!-- ######## START Preview ######## -->
-				<div style="width: 90%; margin: auto;" style="background-color: {{template.backgroundColor}};">
+				<div style="width: 90%; margin: auto; padding: 10px; background-color: {{preview.backgroundColor}};">
 					
 					<h1 ng-if="preview.title.text != undefined && preview.title.text != ''" class="page-header text-{{preview.title.align}}">{{preview.title.text}}</h1>
 					<div class="row" ng-repeat="section in preview.sections" style="background-color: {{section.backgroundColor}}; margin: 8px; padding: 8px;">
