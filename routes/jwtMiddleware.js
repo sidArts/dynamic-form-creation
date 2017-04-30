@@ -44,7 +44,7 @@ module.exports = function(req, res, next) {
 		      }
 		    });
   		} else {
-  			res.end('Your session expired!');
+  			res.status(401).send();
   		}
  	  });
 
