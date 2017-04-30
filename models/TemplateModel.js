@@ -27,9 +27,10 @@ var templateSchema = new Schema({
 							"button": {
 								"text": String,
 								"size": String,
-								"block": { "type": Boolean, "default": false },
 								"fontColor": String,
-								"color": String
+								"color": String,
+								"width": String,
+								"align": String
 							},
 							"createdBy": Schema.ObjectId,
 							"createdAt": Date,

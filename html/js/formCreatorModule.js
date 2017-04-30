@@ -13,9 +13,10 @@
 		$scope.template.button = {
 			"text": "Submit",
 			"size": "",
-			"block": false,
+			"align": "left",
 			"fontColor": "",
-			"color": ""
+			"color": "",
+			"width": 20
 		};
 
 		$scope.template.sections = [];
@@ -82,6 +83,8 @@
           	}).then(function(res){
         	 	console.log(res.data);
         	 	$scope.template = res.data;
+        	 	$scope.model.selectedSection = "0";
+        	 	$scope.section.name = 'Section '+ ($scope.template.sections.length + 1 );
         	 	changeDisplayLayout();
         	 	// $('.jscolor').trigger("change");
         	}, function(err){
@@ -110,6 +113,28 @@
 
 			changeDisplayLayout();
 
+		};
+
+		$scope.moveSectionUp = function(index) {
+			var section = angular.copy($scope.template.sections[index]);
+			$scope.template.sections[index] = angular.copy($scope.template.sections[index - 1]);
+			$scope.template.sections[index - 1] = section;
+			changeDisplayLayout();
+		};
+
+		$scope.moveSectionDown = function(index) {
+			var section = angular.copy($scope.template.sections[index]);
+			$scope.template.sections[index] = angular.copy($scope.template.sections[index + 1]);
+			$scope.template.sections[index + 1] = section;
+			changeDisplayLayout();
+		};
+
+		$scope.removeSection = function(sectionIndex) {
+			if(confirm('Are You sure want to remove this Form Section?'))
+				$scope.template.sections.splice(sectionIndex, 1);
+			
+			// $scope.sortFormElements();
+			changeDisplayLayout();
 		};
 
 		$scope.createElement = function(elementType) {
@@ -230,15 +255,8 @@
 			});
 		};
 
-		$scope.changeDisplayLayoutOfSection = function(sectionIndex) {
-			$scope.preview = angular.copy($scope.template);
-			if($scope.preview.sections[sectionIndex].viewMode == '102') {
-				$scope.preview.sections[sectionIndex].formElements = convertArr(angular.copy($scope.preview.sections[sectionIndex].formElements), 2);
-			} else if($scope.preview.sections[sectionIndex].viewMode == '103') {
-				$scope.preview.sections[sectionIndex].formElements = convertArr(angular.copy($scope.preview.sections[sectionIndex].formElements), 3);
-			} else if($scope.preview.sections[sectionIndex].viewMode == '104') {
-				$scope.preview.sections[sectionIndex].formElements = convertArr(angular.copy($scope.preview.sections[sectionIndex].formElements), 4);
-			} 
+		$scope.changeDisplayLayoutOfSection = function() {
+			changeDisplayLayout();
 		};
 
 		$scope.saveForm = function() {
@@ -264,6 +282,11 @@
 			});
 			
 
+		};
+
+		$scope.goto = function(page){
+			document.navigation.action = '/'+page;
+			document.navigation.submit();
 		};
 
 	});

@@ -31,8 +31,8 @@ rootContext.get('/setup', function(req, res) {
 
   // create a sample user
   var user = new User({ 
-    name: 'sid', 
-    password: '123',
+    name: 'admin', 
+    password: 'admin',
     admin: true 
   });
 
@@ -84,7 +84,7 @@ rootContext.post('/auth', function(req, res) {
           console.log('Token generated & saved to DB ::: '+token);
           res.header('x-access-token', token);
 
-          res.render('homepage', { token:token });
+          res.render('templateListing', { token:token });
         });
 
         // return the information including token as JSON
