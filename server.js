@@ -33,8 +33,10 @@ app.use(favicon(path.join(__dirname+'/favicon.ico')));
 app.set('superSecret', config.secret); // secret variable
 
 if(app.get('env') == 'development') {
+	var url = 'mongodb://admin:admin@ds133496.mlab.com:33496/form_builder_db';
 	//app.use(express.errorHandler());
-	mongoose.connect('mongodb://127.0.0.1:27017/template');
+	//mongoose.connect('mongodb://127.0.0.1:27017/template');
+	mongoose.connect(url);
 }
 
 
