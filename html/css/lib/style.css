@@ -1,0 +1,27 @@
+#parent_div_1{
+    width: 100px;
+    height: 37px;
+    border: 1px solid #cecbcb;
+    border-radius: 5px;
+    margin-right: 10px;
+    float: left;
+    cursor: pointer;
+}
+.child_div_1{
+    margin:5px;
+    width: 65px;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+    display:inline-block;
+    white-space: nowrap;
+}
+.child_div_2{
+    float: right;
+    margin: 5px;
+}
+
+.active{
+    background-color: rgb(26, 179, 148);
+    color: white;
+    border: 2px rgb(42, 99, 87) !important
+}

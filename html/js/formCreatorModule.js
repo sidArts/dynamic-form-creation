@@ -289,6 +289,51 @@
 			document.navigation.submit();
 		};
 
-	});
+		$scope.switchSection = function(index){
+			_.map($scope.template.sections, function(x) { 
+				x.active = false; 
+				return x
+			  });
+			$scope.template.sections[index]['active'] = true;
+			$scope.currentSectionIndex = index;
+			console.log($scope.template.sections);
+		};
+
+	})
+
+	.directive('elementDraggable', ['$document', function($document) {
+        return {
+            link: function(scope, element, attr) {
+                element.on('dragstart', function(event) {
+
+                    event.originalEvent.dataTransfer.setData('templateIdx', $(element).data('index'));
+                });
+            }
+        };
+	}])
+	
+	.directive('elementDrop', ['$document', function($document) {
+        return {
+            link: function(scope, element, attr) {
+
+                element.on('dragover', function(event) {
+                    event.preventDefault();
+                });
+
+                $('.drop').on('dragenter', function(event) {
+                    event.preventDefault();
+                })
+                element.on('drop', function(event) {
+                    event.stopPropagation();
+                    var self = $(this);
+                    scope.$apply(function() {
+                        var idx = event.originalEvent.dataTransfer.getData('templateIdx');
+						var insertIdx = self.data('index');
+                        scope.createElement('textInput', insertIdx);
+                    });
+                });
+            }
+        };
+    }]);
 
 })();
