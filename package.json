@@ -10,7 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.5.6",
+    "express": "^4.16.3",
     "jade": "^1.11.0",
-    "jsonwebtoken": "^7.3.0"
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^5.0.17",
+    "serve-favicon": "^2.5.0"
   }
 }
